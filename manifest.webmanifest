@@ -1,0 +1,17 @@
+{
+  "name": "Empalme",
+  "short_name": "Empalme",
+  "description": "Editor de video: fotos, videos, música y textos a MP4. Todo queda en tu equipo.",
+  "lang": "es",
+  "id": "./empalme.html",
+  "start_url": "./empalme.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14161a",
+  "theme_color": "#14161a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -16,3 +16,11 @@ Editor de video que es un solo archivo HTML: junta fotos, videos, música y text
 - Formatos 16:9, 9:16 y 1:1, en 720p o 1080p.
 - Exportación rápida a MP4 (y modo en tiempo real como alternativa).
 - Guardar y abrir proyectos (`.empalme`), deshacer/rehacer y guardado automático.
+
+## Instalarla como aplicación
+
+Desde https://jonatanquiro.github.io/empalme/ se puede instalar y después abre sin internet:
+
+- **Android (Chrome):** botón "Instalar" arriba, o menú ⋮ → "Instalar aplicación".
+- **iPhone / iPad (Safari):** botón Compartir → "Agregar a inicio".
+- **PC (Chrome o Edge):** ícono de instalar en la barra de direcciones.
