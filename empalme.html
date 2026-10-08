@@ -1000,7 +1000,7 @@ function renderTimeline(){
         if (e.target !== e.currentTarget || S.exporting || performance.now() - justDragged < 350) return;
         clearSel(); if (S.total) seek(tlTime(e));
       }});
-    if (!S.items.length && tr === vis[0]) lane.append(h('div', {class: 'tlhint'}, 'Todavía no hay nada. Tocá "+ Fotos y videos" o arrastrá los archivos a esta ventana.'));
+    if (!S.items.length && tr === vis[0]) lane.append(h('div', {class: 'tlhint'}, 'Todavía no hay nada. Tocá "Fotos y videos" o arrastrá los archivos a esta ventana.'));
     for (const c of items){
       const len = c.type === 'audio' ? c.end2 - c.start : c.len;
       let style = 'left:' + c.start * TL.pps + 'px;width:' + Math.max(6, len * TL.pps - 1) + 'px';
