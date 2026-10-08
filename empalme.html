@@ -12,116 +12,137 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
-:root{--bg:#14161a;--panel:#1d2026;--line:#2c313a;--tx:#eceef2;--mut:#9099a8;--ac:#ffb020;--actx:#1a1300;--bad:#ff6b5e}
+:root{--bg:#0e1014;--panel:#161920;--panel2:#1d212a;--well:#0a0c10;--line:#272c36;--line2:#363d4a;--tx:#eef0f4;--mut:#8d95a5;--ac:#ffb020;--ac2:#ffc657;--actx:#1a1300;--bad:#ff7366;--r:12px}
 *{box-sizing:border-box}
-body{margin:0;overscroll-behavior-y:contain;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{padding:max(10px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left));border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}
-header h1{margin:0;font-size:19px;letter-spacing:.2px}
+html{color-scheme:dark}
+body{margin:0;overscroll-behavior-y:contain;background:radial-gradient(1100px 420px at 50% -120px,#1b1f2a 0%,var(--bg) 70%) no-repeat,var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.ic{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+header{padding:max(10px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 10px max(18px,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:rgba(14,16,20,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:30px;height:30px;flex:none;border-radius:8px}
+header h1{margin:0;font-size:19px;font-weight:700;letter-spacing:-.2px}
 header span{color:var(--mut);font-size:13px;flex:1;min-width:180px}
 .steps,.proj{display:flex;gap:6px}
+.steps{background:var(--well);border:1px solid var(--line);border-radius:var(--r);padding:3px;gap:3px}
+.steps button{border-color:transparent;background:transparent;color:var(--mut);padding:6px 14px;border-radius:9px}
+.steps button:hover{background:var(--panel2);color:var(--tx)}
 .steps button.on{background:var(--ac);color:var(--actx);border-color:var(--ac);font-weight:700}
-main{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:14px 16px;max-width:1300px;margin:0 auto}
+main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:16px 18px 28px;max-width:1300px;margin:0 auto}
 body.step2 main{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
 body:not(.step2) .side{display:none}
 body.step2 .tl{display:none}
 .stage,.side,.tl{min-width:0}
-.screen{background:#000;border:1px solid var(--line);border-radius:10px;display:flex;justify-content:center;overflow:hidden}
+.screen{background:#000;border:1px solid var(--line);border-radius:14px;display:flex;justify-content:center;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.45)}
 canvas#cv{display:block;max-width:100%;max-height:44vh;width:auto;height:auto}
 body.step2 canvas#cv{max-height:62vh}
-.transport{display:flex;align-items:center;gap:10px;margin-top:10px}
+body.step2 .stage{position:sticky;top:14px;align-self:start}
+.transport{display:flex;align-items:center;gap:12px;margin-top:12px}
 .transport input[type=range]{flex:1;min-width:0}
+#play{min-width:96px;border-radius:999px}
 #time{font-variant-numeric:tabular-nums;color:var(--mut);font-size:13px;min-width:86px;text-align:right}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
 main>.panel{margin-bottom:0}
-.panel h2{margin:0 0 10px;font-size:15px}
-button,.btn{font:inherit;color:var(--tx);background:#2a2f38;border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
-button:hover,.btn:hover{background:#343a45}
-button.primary{background:var(--ac);color:var(--actx);border-color:var(--ac);font-weight:700}
-button.primary:hover{filter:brightness(1.08)}
-button.big{width:100%;padding:12px;font-size:16px}
-button.sm{padding:4px 9px;min-width:34px}
+.panel h2{margin:0 0 12px;font-size:12px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--mut)}
+button,.btn{font:inherit;color:var(--tx);background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:8px 13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:background .12s,border-color .12s,transform .06s,filter .12s}
+button:hover,.btn:hover{background:#272c38;border-color:#444c5b}
+button:active{transform:translateY(1px)}
+button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+button.primary,.btn.primary{background:var(--ac);color:var(--actx);border-color:var(--ac);font-weight:700;box-shadow:0 2px 10px rgba(255,176,32,.18)}
+button.primary:hover,.btn.primary:hover{background:var(--ac2);border-color:var(--ac2)}
+button.big{width:100%;padding:13px;font-size:16px;border-radius:var(--r)}
+button.sm{padding:5px 9px;min-width:34px;border-radius:8px}
 button.del{color:var(--bad)}
-button:disabled{opacity:.4;cursor:default}
-input[type=number],input[type=text],select,textarea{font:inherit;color:var(--tx);background:#121418;border:1px solid var(--line);border-radius:6px;padding:5px 8px;min-width:0}
-input[type=number]{width:72px}
+button.del:hover{background:#3a1f1f;border-color:#6b3030}
+button:disabled{opacity:.38;cursor:default;transform:none}
+button[hidden]{display:none}
+input[type=number],input[type=text],select,textarea{font:inherit;color:var(--tx);background:var(--well);border:1px solid var(--line2);border-radius:8px;padding:6px 9px;min-width:0}
+input[type=number]{width:74px}
 input[type=range]{accent-color:var(--ac)}
 input[type=checkbox]{accent-color:var(--ac);width:16px;height:16px}
-input[type=color]{width:44px;height:32px;padding:2px;background:#121418;border:1px solid var(--line);border-radius:6px}
-.empty{color:var(--mut);font-size:13px;padding:4px 0 2px}
-.opt{display:grid;grid-template-columns:auto 1fr;gap:9px 12px;align-items:center;font-size:14px}
+input[type=color]{width:44px;height:32px;padding:2px;background:var(--well);border:1px solid var(--line2);border-radius:8px}
+.empty{color:var(--mut);font-size:13.5px;padding:2px 0}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:center;font-size:14px}
 .opt label{color:var(--mut)}
-.chk{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px}
-.bar{height:8px;background:#121418;border-radius:4px;overflow:hidden;margin:10px 0 6px;display:none}
-.bar b{display:block;height:100%;width:0;background:var(--ac)}
+.chk{display:flex;align-items:center;gap:9px;margin-top:11px;font-size:14px}
+.bar{height:8px;background:var(--well);border-radius:4px;overflow:hidden;margin:12px 0 6px;display:none}
+.bar b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2))}
 #msg,#tlMsg{font-size:13px;color:var(--mut)}
-#msg{min-height:18px;margin-top:6px}
-#result{margin-top:10px;display:none}
-#result video{width:100%;border-radius:8px;background:#000;max-height:260px}
-#result a{display:block;text-align:center;text-decoration:none;margin-top:8px}
-.hint{font-size:12.5px;color:var(--mut);margin:8px 0 0}
+#msg{min-height:18px;margin-top:8px}
+#result{margin-top:12px;display:none}
+#result video{width:100%;border-radius:10px;background:#000;max-height:260px}
+#result a{display:flex;text-decoration:none;margin-top:8px;padding:12px;border-radius:var(--r)}
+.hint{font-size:12.5px;color:var(--mut);margin:10px 0 0}
+details.tips{margin-top:10px;font-size:12.5px;color:var(--mut)}
+details.tips summary{cursor:pointer;width:max-content;padding:2px 0}
+details.tips summary:hover{color:var(--tx)}
+details.tips ul{margin:6px 0 0;padding-left:18px;display:grid;gap:3px}
 body.busy .lock{opacity:.4;pointer-events:none}
-body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;border:3px dashed var(--ac);border-radius:14px;background:rgba(20,22,26,.85);display:grid;place-items:center;font-size:22px;z-index:30}
+body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;border:3px dashed var(--ac);border-radius:16px;background:rgba(14,16,20,.88);display:grid;place-items:center;font-size:22px;font-weight:600;z-index:30}
 
 /* línea de tiempo */
-.tlbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.tlbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
 .tlbar .grow{flex:1}
-.tlbar .grp{display:flex;gap:4px;align-items:center;color:var(--mut);font-size:13px}
-.tlbody{display:flex;border:1px solid var(--line);border-radius:8px;background:#121418;overflow:hidden;user-select:none;-webkit-user-select:none}
-#tlHeads{flex:none;width:48px;border-right:1px solid var(--line);color:var(--mut);font-size:12px}
-#tlHeads .sp{height:23px;border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;justify-content:center;gap:2px;border-bottom:1px solid var(--line)}
-.hd.v,.lane.v{height:57px}
-.hd.a,.lane.a{height:37px}
+.tlbar .grp{display:flex;gap:4px;align-items:center;color:var(--mut);font-size:12.5px}
+.tlbar .grp span{margin-right:2px}
+.tlbody{display:flex;border:1px solid var(--line);border-radius:var(--r);background:var(--well);overflow:hidden;user-select:none;-webkit-user-select:none}
+#tlHeads{flex:none;width:52px;border-right:1px solid var(--line);color:var(--mut);font-size:12px;font-weight:600;background:#0f1217}
+#tlHeads .sp{height:25px;border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;justify-content:center;gap:4px;border-bottom:1px solid var(--line)}
+.hd .ic{width:14px;height:14px}
+.hd.v,.lane.v{height:60px}
+.hd.a,.lane.a{height:40px}
 .hd:last-child,.lane:last-of-type{border-bottom:0}
 .hd .x{padding:0 3px;min-width:0;border:0;background:none;color:var(--bad);font-size:11px}
-#tlScroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden}
+#tlScroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
 #tlInner{position:relative;min-width:100%}
-#ruler{position:relative;height:23px;border-bottom:1px solid var(--line);cursor:pointer;touch-action:none}
-#ruler span{position:absolute;top:0;bottom:0;border-left:1px solid #3a404b;padding-left:4px;font-size:11px;line-height:22px;color:var(--mut);pointer-events:none}
+#ruler{position:relative;height:25px;border-bottom:1px solid var(--line);cursor:pointer;touch-action:none;background:#0f1217}
+#ruler span{position:absolute;top:0;bottom:0;border-left:1px solid var(--line2);padding-left:5px;font-size:11px;line-height:24px;color:var(--mut);font-variant-numeric:tabular-nums;pointer-events:none}
 .lane{position:relative;border-bottom:1px solid var(--line)}
-.blk{position:absolute;top:4px;bottom:4px;border-radius:6px;overflow:hidden;display:flex;align-items:center;gap:6px;cursor:grab;border:2px solid transparent;font-size:12px;white-space:nowrap;touch-action:none}
-.blk.image{background:#27493d}
-.blk.video{background:#28405f}
-.blk.text{background:#6a4a1c;padding-left:6px}
-.blk.audio{background-color:#473866;padding-left:6px}
-.blk.sel{border-color:var(--ac)}
+.lane.a{background:rgba(255,255,255,.012)}
+.blk{position:absolute;top:5px;bottom:5px;border-radius:8px;overflow:hidden;display:flex;align-items:center;gap:7px;cursor:grab;border:2px solid transparent;font-size:12px;font-weight:600;white-space:nowrap;touch-action:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 1px 3px rgba(0,0,0,.4)}
+.blk.image{background:linear-gradient(#22604c,#1b4c3d)}
+.blk.video{background:linear-gradient(#27568a,#1f446e)}
+.blk.text{background:linear-gradient(#94611a,#774d13);padding-left:8px}
+.blk.audio{background-color:#4f3c7c;padding-left:8px}
+.blk.sel{border-color:var(--ac);box-shadow:0 0 0 3px rgba(255,176,32,.22),0 1px 3px rgba(0,0,0,.4)}
 .blk canvas{height:100%;width:auto;flex:none;pointer-events:none}
-.blk span{overflow:hidden;text-overflow:ellipsis;padding-right:8px;pointer-events:none}
-.blk .rz{position:absolute;top:0;bottom:0;right:0;width:9px;cursor:ew-resize;background:rgba(255,255,255,.28);border-left:1px solid rgba(0,0,0,.4)}
-.blk.dragging{z-index:6;opacity:.85;box-shadow:0 4px 14px #000;cursor:grabbing}
-#endMark{position:absolute;top:24px;bottom:0;right:0;background:rgba(8,9,11,.5);border-left:2px dashed #5d6573;pointer-events:none;z-index:2;display:none}
-.recover{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#3a2f12;border:1px solid var(--ac);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:14px}
+.blk span{overflow:hidden;text-overflow:ellipsis;padding-right:10px;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.blk .rz{position:absolute;top:0;bottom:0;right:0;width:9px;cursor:ew-resize;background:rgba(255,255,255,.22);border-left:1px solid rgba(0,0,0,.35)}
+.blk .rz:hover{background:rgba(255,255,255,.4)}
+.blk.dragging{z-index:6;opacity:.88;box-shadow:0 8px 22px #000;cursor:grabbing}
+#endMark{position:absolute;top:26px;bottom:0;right:0;background:rgba(6,7,9,.55);border-left:2px dashed #5d6573;pointer-events:none;z-index:2;display:none}
+.recover{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#33290f;border:1px solid var(--ac);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:14px}
 .recover[hidden]{display:none}
-.recover span{flex:1;min-width:200px}
-#marq{position:absolute;display:none;border:1px solid var(--ac);background:rgba(255,176,32,.15);z-index:7;pointer-events:none}
-.tlbar button.on{border-color:var(--ac);color:var(--ac)}
-#phead{position:absolute;top:0;bottom:0;left:0;width:2px;background:#ff5a4d;z-index:5;pointer-events:none}
-#phead::before{content:"";position:absolute;top:0;left:-5px;border:6px solid transparent;border-top:8px solid #ff5a4d}
-.tlhint{position:absolute;inset:0;display:flex;align-items:center;padding:0 10px;color:var(--mut);font-size:12.5px;white-space:normal;line-height:1.25;pointer-events:none}
-#insp{margin:12px 0;padding-top:12px;border-top:1px solid var(--line)}
-.insp{display:grid;gap:8px}
-.insp .name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recover span{flex:1;min-width:200px;color:var(--tx)}
+#marq{position:absolute;display:none;border:1px solid var(--ac);background:rgba(255,176,32,.15);z-index:7;pointer-events:none;border-radius:3px}
+.tlbar button.on{border-color:var(--ac);color:var(--ac);background:#2c2410}
+#phead{position:absolute;top:0;bottom:0;left:0;width:2px;background:#ff5a4d;z-index:5;pointer-events:none;box-shadow:0 0 6px rgba(255,90,77,.6)}
+#phead::before{content:"";position:absolute;top:0;left:-5px;border:6px solid transparent;border-top:9px solid #ff5a4d}
+.tlhint{position:absolute;inset:0;display:flex;align-items:center;padding:0 12px;color:var(--mut);font-size:13px;font-weight:400;white-space:normal;line-height:1.25;pointer-events:none}
+#insp{margin:14px 0}
+.insp{display:grid;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.insp .name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .insp .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--mut)}
 .insp input[type=text],.insp textarea{width:100%}
 .insp textarea{resize:vertical;min-height:58px}
-.insp .ops{display:flex;gap:8px;flex-wrap:wrap}
-.emo{display:flex;gap:3px;flex-wrap:wrap}
+.insp .ops{display:flex;gap:8px;flex-wrap:wrap;padding-top:2px}
+.emo{display:flex;gap:2px;flex-wrap:wrap}
 .emo button{padding:2px 5px;font-size:19px;line-height:1.2;background:none;border-color:transparent}
-.emo button:hover{background:#343a45}
+.emo button:hover{background:#2c323e}
 
 /* panel de recorte */
-.modal{position:fixed;inset:0;background:rgba(8,9,11,.84);z-index:20;display:flex;align-items:center;justify-content:center;padding:12px}
+.modal{position:fixed;inset:0;background:rgba(6,7,9,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:20;display:flex;align-items:center;justify-content:center;padding:12px}
 .modal[hidden]{display:none}
-.mbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;width:min(780px,100%);max-height:100%;overflow:auto;padding:14px;display:grid;gap:10px}
+.mbox{background:var(--panel);border:1px solid var(--line2);border-radius:16px;width:min(780px,100%);max-height:100%;overflow:auto;padding:16px;display:grid;gap:12px;box-shadow:0 24px 70px rgba(0,0,0,.6)}
 .mhead{display:flex;align-items:center;gap:10px}
 .mhead h2{margin:0;font-size:16px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tvwrap{background:#000;border-radius:8px;display:flex;justify-content:center;overflow:hidden}
+.tvwrap{background:#000;border-radius:10px;display:flex;justify-content:center;overflow:hidden}
 #tv{display:block;width:100%;max-height:42vh}
 .tinfo{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
 .tinfo b{color:var(--ac)}
-.tbar{position:relative;height:56px;margin:4px 18px;background:#0c0d10;border-radius:4px;touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none}
+.tbar{position:relative;height:56px;margin:4px 18px;background:var(--well);border-radius:4px;touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none}
 .tbar canvas{display:block;width:100%;height:100%;border-radius:4px}
-.tbar .shade{position:absolute;top:0;bottom:0;background:rgba(10,11,14,.72);pointer-events:none}
+.tbar .shade{position:absolute;top:0;bottom:0;background:rgba(8,9,12,.74);pointer-events:none}
 #tShL{left:0}
 .tbar .other{position:absolute;top:0;bottom:0;border:2px dashed #cfd5df;border-radius:3px;opacity:.75;pointer-events:none}
 .tsel{position:absolute;top:0;bottom:0;border-top:3px solid var(--ac);border-bottom:3px solid var(--ac);pointer-events:none}
@@ -129,26 +150,29 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
 .hdl{position:absolute;top:0;bottom:0;width:16px;background:var(--ac);cursor:ew-resize;touch-action:none;display:grid;place-items:center}
 .hdl::after{content:"";width:2px;height:20px;background:var(--actx);border-radius:1px}
 .hdl::before{content:"";position:absolute;inset:-8px}
-#tIn{transform:translateX(-100%);border-radius:6px 0 0 6px}
-#tOut{border-radius:0 6px 6px 0}
+#tIn{transform:translateX(-100%);border-radius:7px 0 0 7px}
+#tOut{border-radius:0 7px 7px 0}
 .hdl.on,.hdl:focus-visible{filter:brightness(1.2);outline:2px solid #fff}
 .trow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--mut)}
 .trow button{flex:1 1 150px}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chips:empty{display:none}
-.chip{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.chip{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
 .chip button{border:0;border-radius:0;padding:5px 9px;font-size:13px}
 .chip.on{border-color:var(--ac)}
 .chip.on button:first-child{background:var(--ac);color:var(--actx);font-weight:700}
 .mfoot{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 
 @media(max-width:820px){
-  main,body.step2 main{grid-template-columns:minmax(0,1fr);padding:10px;gap:10px}
+  main,body.step2 main{grid-template-columns:minmax(0,1fr);padding:10px 10px 22px;gap:10px}
   canvas#cv,body.step2 canvas#cv{max-height:40vh}
+  body.step2 .stage{position:static}
   header span{display:none}
+  .brand{flex:1}
+  .proj button{padding:8px 10px}
   .steps{flex:1 1 100%}.steps button{flex:1;padding:8px 6px}
-  header h1{flex:1}
   .tlbar .grp span{display:none}
+  .panel{padding:12px}
   .modal{padding:0}
   .mbox{border-radius:0;height:100%;align-content:start}
   #tv{max-height:34vh}
@@ -156,18 +180,39 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M8 3v5h7M7 21v-7h10v7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-9 8"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 7V4h14v3M12 4v16M9 20h6"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 8L20 18M8.5 16L20 6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="i-split" viewBox="0 0 24 24"><path d="M12 3v18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+</svg>
 <header>
-  <h1>Empalme</h1><span>Fotos + videos + música → un video. Todo queda en tu equipo, no se sube nada.</span>
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#ffb020"/><path d="M10.9 8.6v14.8l13.1-7.4z" fill="#14161a"/><path d="M19.2 6.5l-6.3 19" stroke="#ffb020" stroke-width="1.9"/></svg><h1>Empalme</h1></div><span>Fotos + videos + música → un video. Todo queda en tu equipo, no se sube nada.</span>
   <div class="proj lock">
-    <button id="newP" title="Borrar todo y empezar un video nuevo">✚ Nuevo</button>
-    <button id="openP" title="Abrir un proyecto guardado">📂 Abrir</button>
+    <button id="newP" title="Borrar todo y empezar un video nuevo"><svg class="ic" aria-hidden="true"><use href="#i-file"/></svg>Nuevo</button>
+    <button id="openP" title="Abrir un proyecto guardado"><svg class="ic" aria-hidden="true"><use href="#i-folder"/></svg>Abrir</button>
     <input id="fProj" type="file" accept=".empalme,.armador" hidden>
-    <button id="saveP" title="Guardar el proyecto para seguir otro día (Ctrl+S)">💾 Guardar</button>
-    <button id="install" title="Instalar Empalme como aplicación" hidden>⬇ Instalar</button>
+    <button id="saveP" title="Guardar el proyecto para seguir otro día (Ctrl+S)"><svg class="ic" aria-hidden="true"><use href="#i-save"/></svg>Guardar</button>
+    <button id="install" title="Instalar Empalme como aplicación" hidden><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Instalar</button>
   </div>
   <nav class="steps lock">
     <button id="go1" class="on">1 · Armar</button>
-    <button id="go2">2 · Opciones y crear video</button>
+    <button id="go2">2 · Crear video</button>
   </nav>
 </header>
 <main>
@@ -187,20 +232,20 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
       <button id="recNo">Descartar</button>
     </div>
     <div class="tlbar">
-      <button id="addMedia" class="primary">+ Fotos y videos</button>
+      <button id="addMedia" class="primary"><svg class="ic" aria-hidden="true"><use href="#i-image"/></svg>Fotos y videos</button>
       <input id="fMedia" type="file" accept="image/*,video/*" multiple hidden>
-      <button id="addMusic">+ Música</button>
+      <button id="addMusic"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg>Música</button>
       <input id="fMusic" type="file" accept="audio/*" multiple hidden>
-      <button id="addText">+ Texto</button>
+      <button id="addText"><svg class="ic" aria-hidden="true"><use href="#i-text"/></svg>Texto</button>
       <span id="tlMsg" class="grow"></span>
       <div class="grp">
-        <button id="undo" class="sm" title="Deshacer (Ctrl+Z)" disabled>↶</button>
-        <button id="redo" class="sm" title="Rehacer (Ctrl+Y)" disabled>↷</button>
-        <button id="multi" class="sm" title="Elegir varios clips tocándolos uno por uno (con mouse: Ctrl + clic, o arrastrar un recuadro)">☑ Elegir varios</button>
+        <button id="undo" class="sm" title="Deshacer (Ctrl+Z)" disabled aria-label="Deshacer"><svg class="ic" aria-hidden="true"><use href="#i-undo"/></svg></button>
+        <button id="redo" class="sm" title="Rehacer (Ctrl+Y)" disabled aria-label="Rehacer"><svg class="ic" aria-hidden="true"><use href="#i-redo"/></svg></button>
+        <button id="multi" class="sm" title="Elegir varios clips tocándolos uno por uno (con mouse: Ctrl + clic, o arrastrar un recuadro)"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Elegir varios</button>
       </div>
       <div class="grp"><span>Agregar pista</span>
-        <button id="addV" class="sm" title="Agregar otra pista de imagen (lo de arriba tapa a lo de abajo)">+ 🎞</button>
-        <button id="addA" class="sm" title="Agregar otra pista de sonido (suenan a la vez)">+ ♪</button>
+        <button id="addV" class="sm" title="Agregar otra pista de imagen (lo de arriba tapa a lo de abajo)" aria-label="Agregar pista de imagen"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg><svg class="ic" aria-hidden="true"><use href="#i-film"/></svg></button>
+        <button id="addA" class="sm" title="Agregar otra pista de sonido (suenan a la vez)" aria-label="Agregar pista de sonido"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg></button>
       </div>
       <div class="grp"><span>Zoom</span>
         <button id="zOut" class="sm" title="Alejar">−</button>
@@ -220,13 +265,23 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
         </div>
       </div>
     </div>
-    <p class="hint">Arrastrá cada clip a donde quieras: podés dejar espacios en negro o pasarlo a otra pista. Si lo soltás encima de otro, se mete en ese lugar y corre a los demás. Con Ctrl + clic (o "Elegir varios") seleccionás más de uno para moverlos o quitarlos juntos. Con Ctrl+C y Ctrl+V copiás y pegás clips (también podés pegar una foto o captura copiada de otro lado).</p>
+    <details class="tips">
+      <summary>Trucos y atajos</summary>
+      <ul>
+        <li>Arrastrá cada clip a donde quieras: podés dejar espacios en negro o pasarlo a otra pista.</li>
+        <li>Si lo soltás encima de otro, se mete en ese lugar y corre a los demás.</li>
+        <li>Las fotos y los textos se estiran desde su borde derecho.</li>
+        <li>Con Ctrl + clic (o "Elegir varios") seleccionás más de uno para moverlos o quitarlos juntos.</li>
+        <li>Ctrl+C y Ctrl+V copian y pegan clips; también podés pegar una foto o captura copiada de otro lado.</li>
+        <li>Ctrl+Z deshace, Supr quita lo elegido y la barra espaciadora reproduce.</li>
+      </ul>
+    </details>
     <div id="insp"></div>
-    <button id="next" class="primary big">Siguiente: opciones y crear video →</button>
+    <button id="next" class="primary big">Siguiente: opciones y crear video<svg class="ic" aria-hidden="true"><use href="#i-right"/></svg></button>
   </section>
 
   <section class="side">
-    <button id="back" class="lock" style="margin-bottom:14px">← Volver a armar</button>
+    <button id="back" class="lock" style="margin-bottom:14px"><svg class="ic" aria-hidden="true"><use href="#i-left"/></svg>Volver a armar</button>
     <div class="panel lock">
       <h2>Tipo de video</h2>
       <div class="opt">
@@ -263,7 +318,7 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
       <button id="cancel" class="big" style="display:none;margin-top:8px">Cancelar</button>
       <div class="bar" id="bar"><b></b></div>
       <div id="msg"></div>
-      <div id="result"><video id="rv" controls playsinline></video><button id="share" class="primary big" style="display:none;margin-top:8px">↗ Compartir o guardar en el teléfono</button><a id="dl" class="btn primary" download>⬇ Descargar video</a></div>
+      <div id="result"><video id="rv" controls playsinline></video><button id="share" class="primary big" style="display:none;margin-top:8px"><svg class="ic" aria-hidden="true"><use href="#i-share"/></svg>Compartir o guardar en el teléfono</button><a id="dl" class="btn primary" download>⬇ Descargar video</a></div>
       <p class="hint" id="expHint"></p>
     </div>
   </section>
@@ -332,6 +387,11 @@ const FONTS = {
 };
 const EMOJIS = ['😀','😂','😍','🥰','😎','🥳','😢','😮','👍','👏','🙏','💪','❤️','🔥','⭐','✨','🎉','🎂','🎁','🎵','📸','🌈','☀️','🌙','✈️','🏖️','⚽','🐶','🍕','➡️'];
 
+const ico = n => {
+  const NS = 'http://www.w3.org/2000/svg', v = document.createElementNS(NS, 'svg'), u = document.createElementNS(NS, 'use');
+  v.setAttribute('class', 'ic'); v.setAttribute('aria-hidden', 'true'); u.setAttribute('href', '#i-' + n); v.append(u);
+  return v;
+};
 function h(tag, props, ...kids){
   const e = document.createElement(tag);
   for (const k in (props || {})){
@@ -933,7 +993,7 @@ function renderTimeline(){
   [...vis.slice().reverse(), ...aud].forEach(tr => {
     const list = tr.kind === 'v' ? vis : aud, items = row(tr.id);
     heads.append(h('div', {class: 'hd ' + tr.kind, title: tr.kind === 'v' ? 'Pista de imagen: fotos, videos y textos' : 'Pista de sonido'},
-      (tr.kind === 'v' ? '🎞' : '♪') + (list.indexOf(tr) + 1),
+      ico(tr.kind === 'v' ? 'film' : 'music'), String(list.indexOf(tr) + 1),
       !items.length && list.length > 1 ? h('button', {class: 'x', title: 'Quitar esta pista vacía', onclick: () => removeTrack(tr)}, '✕') : ''));
     const lane = h('div', {class: 'lane ' + tr.kind, 'data-track': tr.id, 'data-kind': tr.kind,
       onclick: e => {
@@ -1063,7 +1123,7 @@ function renderInspector(){
   const trimIns = () => {
     const len = h('span', {});
     upd.push(() => { len.textContent = '· dura ' + fmtP(c.tout - c.tin); });
-    return ['desde', num(() => c.tin, v => {
+    return ['Usar desde', num(() => c.tin, v => {
       changeLen(c, () => { c.tin = clamp(v || 0, 0, Math.max(0, c.natDur - 0.2)); if (c.tout < c.tin + 0.2) c.tout = Math.min(c.natDur, c.tin + 0.2); });
       refreshThumb(c);
     }, {'aria-label': 'Desde (segundos)'}), 'hasta', num(() => c.tout, v => {
@@ -1085,10 +1145,10 @@ function renderInspector(){
   if (c.type === 'image'){
     out.append(h('div', {class: 'row'}, 'Foto · empieza en', start, 'seg · dura', durIn(), 'seg'), sizeRow(), caption());
   } else if (c.type === 'video'){
-    out.append(h('div', {class: 'row'}, 'Video · empieza en', start, 'seg'), h('div', {class: 'row'}, 'Usar', ...trimIns()), volRow('Volumen de este video'), fadeRow(), sizeRow(), caption());
-    ops.append(h('button', {class: 'primary', onclick: () => openTrim(c)}, '✂ Recortar'));
+    out.append(h('div', {class: 'row'}, 'Video · empieza en', start, 'seg'), h('div', {class: 'row'}, ...trimIns()), volRow('Volumen de este video'), fadeRow(), sizeRow(), caption());
+    ops.append(h('button', {class: 'primary', onclick: () => openTrim(c)}, ico('scissors'), 'Recortar'));
   } else if (c.type === 'audio'){
-    out.append(h('div', {class: 'row'}, 'Sonido · empieza en', start, 'seg'), h('div', {class: 'row'}, 'Usar', ...trimIns()), volRow('Volumen de este sonido'), fadeRow(),
+    out.append(h('div', {class: 'row'}, 'Sonido · empieza en', start, 'seg'), h('div', {class: 'row'}, ...trimIns()), volRow('Volumen de este sonido'), fadeRow(),
       h('label', {class: 'chk', style: 'margin:0'}, h('input', {type: 'checkbox', checked: c.loop, onchange: e => { snap(); c.loop = e.target.checked; relayout(); }}), ' Repetir hasta el final del video (o hasta el próximo sonido de la pista)'));
   } else {
     const ta = h('textarea', {rows: 2, placeholder: 'Escribí el texto…', maxLength: 300, value: c.text, oninput: () => {
@@ -1114,9 +1174,9 @@ function renderInspector(){
       h('div', {class: 'row'}, 'Aparece en', start, 'seg · dura', durIn(), 'seg'));
   }
   ops.append(
-    h('button', {title: 'Hace una copia justo después' + (c.src ? ', usando el mismo archivo' : ''), onclick: () => duplicateItem(c)}, '⧉ Duplicar'),
-    h('button', {title: 'Parte este clip en dos donde está el cursor rojo', onclick: () => splitItem(c)}, '⟊ Dividir en el cursor'),
-    h('button', {class: 'del', onclick: () => removeItems([c])}, '✕ Quitar'));
+    h('button', {title: 'Hace una copia justo después' + (c.src ? ', usando el mismo archivo' : ''), onclick: () => duplicateItem(c)}, ico('copy'), 'Duplicar'),
+    h('button', {title: 'Parte este clip en dos donde está el cursor rojo', onclick: () => splitItem(c)}, ico('split'), 'Dividir en el cursor'),
+    h('button', {class: 'del', onclick: () => removeItems([c])}, ico('x'), 'Quitar'));
   out.append(ops);
   upd.forEach(f => f());
   box.append(out);
@@ -1285,7 +1345,7 @@ function showResult(blob, type, extra){
   $('#dl').textContent = '⬇ Descargar video (' + ext.toUpperCase() + ', ' + (blob.size / 1048576).toFixed(1) + ' MB)';
   $('#result').style.display = 'block';
   const sf = shareable(blob, name);
-  $('#share').style.display = sf ? '' : 'none';
+  $('#share').style.display = sf && TOUCH ? '' : 'none';
   $('#share').onclick = () => navigator.share({files: [sf]}).catch(() => {});
   if (TOUCH && sf){ say('¡Listo!' + (extra || '') + ' Tocá "Compartir o guardar" para mandarlo o guardarlo en tu galería.'); return; }
   say('¡Listo!' + (extra || '') + ' Si no se descargó solo, tocá el botón.');
