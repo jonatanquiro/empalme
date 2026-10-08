@@ -212,7 +212,7 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
         </div>
       </div>
     </div>
-    <p class="hint">Arrastrá cada clip a donde quieras: podés dejar espacios en negro o pasarlo a otra pista. Si lo soltás encima de otro, se mete en ese lugar y corre a los demás. Con Ctrl + clic (o "Elegir varios") seleccionás más de uno para moverlos o quitarlos juntos.</p>
+    <p class="hint">Arrastrá cada clip a donde quieras: podés dejar espacios en negro o pasarlo a otra pista. Si lo soltás encima de otro, se mete en ese lugar y corre a los demás. Con Ctrl + clic (o "Elegir varios") seleccionás más de uno para moverlos o quitarlos juntos. Con Ctrl+C y Ctrl+V copiás y pegás clips (también podés pegar una foto o captura copiada de otro lado).</p>
     <div id="insp"></div>
     <button id="next" class="primary big">Siguiente: opciones y crear video →</button>
   </section>
@@ -842,6 +842,29 @@ function splitItem(c){
   else { n = cloneItem(c, {tin: c.tin + local}); c.tout = c.tin + local; }
   n.track = c.track; n.start = c.start + local; S.items.push(n);
   S.sels = [n.id]; note(''); refresh();
+}
+// Copiar y pegar clips dentro de la página (Ctrl+C / Ctrl+X / Ctrl+V). Lo pegado aparece donde está el cursor rojo,
+// en las mismas pistas y conservando la separación entre los clips copiados.
+let CLIP = [];
+function copySel(cutToo){
+  const list = selItems();
+  if (!list.length) return;
+  CLIP = list.map(c => { const p = {}; for (const k of KEYS) if (k in c) p[k] = c[k]; return {c, p}; });
+  if (cutToo) removeItems(list);
+  note(list.length === 1 ? 'Clip copiado. Pegalo con Ctrl+V donde esté el cursor rojo.' : list.length + ' clips copiados. Pegalos con Ctrl+V donde esté el cursor rojo.');
+}
+function pasteClips(){
+  if (!CLIP.length || S.exporting) return;
+  snap(); pause();
+  const t0 = Math.min(...CLIP.map(k => k.p.start)), made = [];
+  for (const k of CLIP.slice().sort((a, b) => a.p.start - b.p.start)){
+    const n = cloneItem(k.c, Object.assign({}, k.p)), kind = isVis(n) ? 'v' : 'a';
+    if (!S.tracks.some(t => t.id === n.track && t.kind === kind)) n.track = tracksOf(kind)[0].id;
+    n.start = -1e9; S.items.push(n);          // todavía "fuera" de la pista, para que moveItem lo ubique sin pisar a nadie
+    moveItem(n, n.track, S.t + k.p.start - t0);
+    made.push(n.id);
+  }
+  S.sels = made; note(''); refresh();
 }
 function removeItems(list){
   if (!list.length) return;
@@ -1699,7 +1722,7 @@ function clearProject(keepAuto){
   pause();
   ALL.forEach(c => { if (c.type === 'video' || c.type === 'audio'){ c.el.pause(); if (c.node) c.node.disconnect(); c.el.removeAttribute('src'); c.el.load(); } });
   SRCS.forEach(x => URL.revokeObjectURL(x.url));
-  ALL.clear(); SRCS.length = 0;
+  ALL.clear(); SRCS.length = 0; CLIP = [];
   S.items = []; S.sels = []; S.t = 0;
   H.undo.length = H.redo.length = 0; histUI();
   if (!keepAuto){ AS.n = 0; asRun('readwrite', st => st.clear()); }
@@ -1889,9 +1912,17 @@ document.addEventListener('keydown', e => {
   if (e.code === 'Space'){ e.preventDefault(); S.playing ? pause() : play(); }
   else if (ctrl && k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); }
   else if (ctrl && k === 'y'){ e.preventDefault(); redo(); }
+  else if (ctrl && (k === 'c' || k === 'x') && editing && S.sels.length){ e.preventDefault(); copySel(k === 'x'); }
   else if (ctrl && k === 'a' && editing){ e.preventDefault(); S.sels = S.items.map(c => c.id); markSel(); renderInspector(); }
   else if (e.key === 'Escape') clearSel();
   else if (e.key === 'Delete' && editing) removeItems(selItems());
+});
+// Ctrl+V: si en el portapapeles hay archivos (una captura de pantalla, una foto copiada) se agregan; si no, se pegan los clips copiados acá.
+document.addEventListener('paste', e => {
+  if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || S.exporting || T.clip || document.body.classList.contains('step2')) return;
+  const files = e.clipboardData ? Array.from(e.clipboardData.files || []).filter(kindOf) : [];
+  if (files.length){ e.preventDefault(); addFiles(files); }
+  else if (CLIP.length){ e.preventDefault(); pasteClips(); }
 });
 let dragN = 0;
 window.addEventListener('dragenter', e => { e.preventDefault(); if (!S.exporting){ dragN++; document.body.classList.add('drag'); } });
