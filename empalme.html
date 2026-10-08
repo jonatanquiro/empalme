@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Armador de videos</title>
+<title>Empalme</title>
 <style>
 :root{--bg:#14161a;--panel:#1d2026;--line:#2c313a;--tx:#eceef2;--mut:#9099a8;--ac:#ffb020;--actx:#1a1300;--bad:#ff6b5e}
 *{box-sizing:border-box}
@@ -150,10 +150,11 @@ body.drag::after{content:"Soltá los archivos acá";position:fixed;inset:10px;bo
 </head>
 <body>
 <header>
-  <h1>Armador de videos</h1><span>Fotos + videos + música → un video. Todo queda en tu equipo, no se sube nada.</span>
+  <h1>Empalme</h1><span>Fotos + videos + música → un video. Todo queda en tu equipo, no se sube nada.</span>
   <div class="proj lock">
+    <button id="newP" title="Borrar todo y empezar un video nuevo">✚ Nuevo</button>
     <button id="openP" title="Abrir un proyecto guardado">📂 Abrir</button>
-    <input id="fProj" type="file" accept=".armador" hidden>
+    <input id="fProj" type="file" accept=".empalme,.armador" hidden>
     <button id="saveP" title="Guardar el proyecto para seguir otro día (Ctrl+S)">💾 Guardar</button>
   </div>
   <nav class="steps lock">
@@ -1665,7 +1666,7 @@ async function runFast(){
 }
 
 /* ---------- guardar y abrir proyecto ---------- */
-// Un proyecto es un solo archivo .armador: un encabezado, la descripción en JSON y, a continuación,
+// Un proyecto es un solo archivo .empalme (los .armador de versiones anteriores también se abren): un encabezado, la descripción en JSON y, a continuación,
 // todas las fotos, videos y sonidos tal cual. Así se puede abrir en otra computadora sin buscar nada.
 function tell(t){ note(t); say(t); }
 function projectMeta(){
@@ -1687,7 +1688,7 @@ function buildProject(){
 function saveProject(){
   if (!S.items.length){ tell('Todavía no hay nada para guardar.'); return; }
   const d = new Date(), p = n => String(n).padStart(2, '0');
-  const name = 'proyecto-video-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '.armador';
+  const name = 'proyecto-video-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '.empalme';
   const blob = buildProject(), url = URL.createObjectURL(blob);
   h('a', {href: url, download: name}).click();
   setTimeout(() => URL.revokeObjectURL(url), 120000);
@@ -1733,6 +1734,15 @@ async function loadProject(meta, files, keys){
   refresh(); asTouch();
   tell((keys ? 'Trabajo recuperado' : 'Proyecto abierto') + (bad.length ? ', pero no se pudo cargar: ' + bad.join(', ') + '.' : '.'));
 }
+function newProject(){
+  if (S.exporting) return;
+  if (S.items.length && !confirm('Se va a borrar todo lo que tenés armado para empezar un video nuevo. ¿Seguro?')) return;
+  asDiscard(); clearProject();
+  S.tracks = [{id: 1, kind: 'v'}, {id: 2, kind: 'a'}];
+  S.dirty = false; TL.zoom = 1;
+  $('#result').style.display = 'none';
+  setStep(1); refresh(); tell('');
+}
 async function openProject(file){
   if (S.exporting) return;
   if (S.items.length && !confirm('Se va a reemplazar lo que tenés armado ahora. ¿Abrir el proyecto igual?')) return;
@@ -1742,7 +1752,7 @@ async function openProject(file){
     if (!head.startsWith('ARMADOR1') || !(n > 0)) throw 0;
     meta = JSON.parse(await file.slice(21, 21 + n).text()); pos = 21 + n;
     if (!Array.isArray(meta.items) || !Array.isArray(meta.tracks) || !Array.isArray(meta.files)) throw 0;
-  } catch (e) { tell('Ese archivo no es un proyecto de Armador de videos, o está dañado.'); return; }
+  } catch (e) { tell('Ese archivo no es un proyecto de Empalme, o está dañado.'); return; }
   asDiscard();
   tell('Abriendo proyecto…');
   const files = meta.files.map(f => { const fl = new File([file.slice(pos, pos + f.size)], f.name, {type: f.type}); pos += f.size; return fl; });
@@ -1751,7 +1761,7 @@ async function openProject(file){
 
 /* ---------- guardado automático ---------- */
 // Mientras se trabaja, el proyecto y sus archivos se van copiando al almacenamiento del navegador (IndexedDB).
-// Si la pestaña se cierra sin guardar, al volver a abrir el armador se ofrece recuperarlo.
+// Si la pestaña se cierra sin guardar, al volver a abrir Empalme se ofrece recuperarlo.
 const AS = {db: null, n: 0, q: Promise.resolve(), hold: null, timer: 0, off: false};
 function asTx(mode, fn){
   return new Promise(res => {
@@ -1830,6 +1840,7 @@ $('#undo').onclick = undo;
 $('#redo').onclick = redo;
 $('#multi').onclick = () => { S.multi = !S.multi; $('#multi').classList.toggle('on', S.multi); };
 $('#saveP').onclick = saveProject;
+$('#newP').onclick = newProject;
 $('#openP').onclick = () => $('#fProj').click();
 $('#fProj').onchange = e => { if (e.target.files[0]) openProject(e.target.files[0]); e.target.value = ''; };
 $('.side').addEventListener('change', () => { S.dirty = true; asTouch(); });
@@ -1889,7 +1900,7 @@ window.addEventListener('dragover', e => e.preventDefault());
 window.addEventListener('drop', e => {
   e.preventDefault(); dragN = 0; document.body.classList.remove('drag');
   if (S.exporting || !e.dataTransfer || !e.dataTransfer.files.length) return;
-  const proj = Array.from(e.dataTransfer.files).find(f => /\.armador$/i.test(f.name));
+  const proj = Array.from(e.dataTransfer.files).find(f => /\.(empalme|armador)$/i.test(f.name));
   if (proj) openProject(proj); else addFiles(e.dataTransfer.files);
 });
 window.addEventListener('beforeunload', e => { if (S.exporting || (S.dirty && S.items.length)){ e.preventDefault(); e.returnValue = ''; } });
