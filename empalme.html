@@ -1898,8 +1898,11 @@ $('#ruler').addEventListener('pointermove', e => { if ($('#ruler').hasPointerCap
 window.addEventListener('resize', renderTimeline);
 $('#exp').onclick = startExport;
 $('#cancel').onclick = cancelExport;
+const isWriting = el => el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || (el.tagName === 'INPUT' && /^(text|number|search|)$/.test(el.type));
 document.addEventListener('keydown', e => {
-  const typing = /INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName);
+  // "typing": hay un control activo (ahí Espacio es del control). "writing": se está escribiendo de verdad;
+  // solo eso frena los demás atajos, así siguen andando aunque el último clic haya sido en un botón.
+  const typing = /INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName), writing = isWriting(e.target);
   if (T.clip){
     if (e.key === 'Escape') closeTrim();
     else if (e.code === 'Space' && !typing){ e.preventDefault(); trimToggle(); }
@@ -1907,9 +1910,9 @@ document.addEventListener('keydown', e => {
   }
   const ctrl = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
   if (ctrl && k === 's'){ e.preventDefault(); if (!S.exporting) saveProject(); return; }
-  if (typing || S.exporting) return;
+  if (writing || S.exporting) return;
   const editing = !document.body.classList.contains('step2');
-  if (e.code === 'Space'){ e.preventDefault(); S.playing ? pause() : play(); }
+  if (e.code === 'Space'){ if (!typing){ e.preventDefault(); S.playing ? pause() : play(); } }
   else if (ctrl && k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); }
   else if (ctrl && k === 'y'){ e.preventDefault(); redo(); }
   else if (ctrl && (k === 'c' || k === 'x') && editing && S.sels.length){ e.preventDefault(); copySel(k === 'x'); }
@@ -1919,7 +1922,7 @@ document.addEventListener('keydown', e => {
 });
 // Ctrl+V: si en el portapapeles hay archivos (una captura de pantalla, una foto copiada) se agregan; si no, se pegan los clips copiados acá.
 document.addEventListener('paste', e => {
-  if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || S.exporting || T.clip || document.body.classList.contains('step2')) return;
+  if (isWriting(e.target) || S.exporting || T.clip || document.body.classList.contains('step2')) return;
   const files = e.clipboardData ? Array.from(e.clipboardData.files || []).filter(kindOf) : [];
   if (files.length){ e.preventDefault(); addFiles(files); }
   else if (CLIP.length){ e.preventDefault(); pasteClips(); }
